@@ -1,0 +1,73 @@
+div {
+    font-family: 'Roboto', arial;
+}
+.header {
+    display: inline-block;
+    margin: 20px auto;
+    width: 100%;
+    text-align: center;
+}
+.title {
+    font-size: 31px;
+    margin-bottom: 5px;
+}
+.author {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: #ddd;
+}
+.subheader {
+    width: 308px;
+    margin: 0 auto 25px;
+}
+#new-game {
+    display: inline-block;
+    height: 23px;
+    width: 72px;
+    margin-left: 7px;
+    padding-top: 5px;
+    background-color: grey;
+    border-radius: 5px;
+    font-size: 14px;
+    color: black;
+    text-align: center;
+    cursor: pointer;
+}
+#status {
+    display: inline-block;
+    margin-left: 28px;
+}
+.game-container {
+    width: 308px;
+    height: 300px;
+    margin: auto;
+    margin-bottom: 50px;
+}
+#row-zero {
+    height: 100px;
+}
+#row-one {
+    height: 100px;
+}
+#row-two {
+    height: 100px;
+}
+.move {
+    float: left;
+    width: 98px;
+    height: 98px;
+    border: 1px solid black;
+}
+.player-1 {
+    background-color: #142E54;
+}
+.player-2 {
+    background-color: #8CA7CE;
+}
+.winning-square {
+    height: 90px;
+    width: 90px;
+    border: 5px solid gold;
+}
