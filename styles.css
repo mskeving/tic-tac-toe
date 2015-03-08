@@ -1,11 +1,14 @@
-div {
-    font-family: 'Roboto', arial;
-}
 .header {
     display: inline-block;
     margin: 20px auto;
     width: 100%;
     text-align: center;
+    font-family: 'Roboto', arial;
+}
+.subheader {
+    width: 308px;
+    margin: 0 auto 25px;
+    font-family: 'Roboto', arial;
 }
 .title {
     font-size: 31px;
@@ -18,11 +21,7 @@ div {
     font-size: 10px;
     color: #ddd;
 }
-.subheader {
-    width: 308px;
-    margin: 0 auto 25px;
-}
-#new-game {
+#reset-game {
     display: inline-block;
     height: 23px;
     width: 72px;
@@ -44,15 +43,6 @@ div {
     height: 300px;
     margin: auto;
     margin-bottom: 50px;
-}
-#row-zero {
-    height: 100px;
-}
-#row-one {
-    height: 100px;
-}
-#row-two {
-    height: 100px;
 }
 .move {
     float: left;
