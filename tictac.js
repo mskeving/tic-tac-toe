@@ -52,10 +52,10 @@
 
         if (squareID === null) {
             changeStatus('Error: can\'t find next move');
+        } else {
+            takeSquare(squareID, COMPUTER);
+            gameState.board = updateBoard(gameState.board, squareID, COMPUTER);
         }
-
-        takeSquare(squareID, COMPUTER);
-        gameState.board = updateBoard(gameState.board, squareID, COMPUTER);
 
         if (gameIsOver(gameState)){
             displayResults(gameState);
@@ -185,7 +185,7 @@
 
     function resetGameBoard(){
         $('.move').removeClass('winning-square player-1 player-2');
-        $('.move').off('click');
+        removeClickHandler();
     }
 
     function removeClickHandler(){
