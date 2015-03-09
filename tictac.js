@@ -48,7 +48,7 @@
 
         removeClickHandler();
         changeStatus('Computer\'s move.');
-        squareID = getComputerMove(gameState);
+        squareID = getNextMove(gameState.board);
 
         if (squareID === null) {
             changeStatus('Error: can\'t find next move');
@@ -64,61 +64,82 @@
         }
     }
 
-    function getComputerMove(gameState) {
-        // Computer tries to find winning move.
-        // If it can't, it tries to prevent human from winning.
-        // If neither of those are possible, take middle or next available square.
-        var nextMove;
+    function getNextMove(gameBoard) {
+        return calcMove(COMPUTER, gameBoard).move;
 
-        function canWinOrPreventWin(potentialWinner) {
-            var combo, playerHas, playerDoesntHave;
-            for (combo=0; combo<WINNINGCOMBOS.length; combo++){
-                playerHas = [];
-                playerDoesntHave = [];
+        function calcMove (player, state) {
+            var bestScore, bestMove, newState, score, i;
 
-                playerAtFirst = gameState.board[WINNINGCOMBOS[combo][0]];
-                playerAtSecond = gameState.board[WINNINGCOMBOS[combo][1]];
-                playerAtThird = gameState.board[WINNINGCOMBOS[combo][2]];
+            for (i = 0; i < state.length; i++) {
+                if (state[i] == 0) {
+                    newState = getNewState(player, state, i);
+                    score = calcScore(player, newState);
 
-                if (playerAtFirst === potentialWinner) {
-                    playerHas.push(WINNINGCOMBOS[combo][0]);
-                } else {
-                    playerDoesntHave.push(WINNINGCOMBOS[combo][0]);
-                }
-
-                if (playerAtSecond === potentialWinner) {
-                    playerHas.push(WINNINGCOMBOS[combo][1]);
-                } else {
-                    playerDoesntHave.push(WINNINGCOMBOS[combo][1]);
-                }
-
-                if (playerAtThird === potentialWinner) {
-                    playerHas.push(WINNINGCOMBOS[combo][2]);
-                } else {
-                    playerDoesntHave.push(WINNINGCOMBOS[combo][2]);
-                }
-
-                if (playerHas.length === 2 && moveIsAvailable(gameState.board, playerDoesntHave[0])) {
-                    nextMove = playerDoesntHave[0];
-                    return true;
+                    if (bestScore == undefined || isNewScoreBestScore(score, best_score, player)) {
+                        bestScore = score;
+                        bestMove = i;
+                    }
                 }
             }
-            return false;
+
+            return {
+                move: bestMove,
+                score: bestScore
+            };
         }
 
-        if (canWinOrPreventWin(COMPUTER) || canWinOrPreventWin(HUMAN)) {
-            return nextMove;
-        } else if (moveIsAvailable(gameState.board, 4)) {
-            return 4;
-        } else {
-            for (var x=0; x<gameState.board.length; x++){
-                if (moveIsAvailable(gameState.board, gameState.board[x])) {
-                    return x;
+        function getNewState(player, state, move) {
+            var state_copy = state.slice();
+            state_copy[move] = player;
+            return state_copy;
+        }
+
+        function calcScore(player, state) {
+            if (isWin(state)) {
+                if (player == COMPUTER) {
+                    return 1;
+                } else {
+                    return -1;
                 }
+            } else if (isDraw(state)) {
+                return 0;
+            } else {
+                return calcMove(next_player(player), state).score;
             }
         }
-        return null;
+
+        function next_player(player) {
+            if (player == COMPUTER) {
+                return HUMAN;
+            }
+            return COMPUTER;
+        }
+
+        function isNewScoreBestScore(score, bestScore_so_far, player) {
+            return ((player == COMPUTER && score > bestScore_so_far) ||
+                (player == HUMAN && score < bestScore_so_far));
+        }
     }
+
+    function isWin(board) {
+        var playerAtFirst, playerAtSecond, playerAtThird;
+        for (var combo=0; combo<WINNINGCOMBOS.length; combo++) {
+            playerAtFirst = board[WINNINGCOMBOS[combo][0]];
+            playerAtSecond = board[WINNINGCOMBOS[combo][1]];
+            playerAtThird = board[WINNINGCOMBOS[combo][2]];
+
+            if (playerAtFirst === playerAtSecond && playerAtSecond === playerAtThird &&
+                    [playerAtFirst, playerAtSecond, playerAtThird].indexOf(0) === -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function isDraw(board) {
+        return (board.indexOf(0) === -1);
+    }
+
 
     function gameIsOver(gameState) {
         gameState = checkForNewState(gameState);
@@ -128,7 +149,7 @@
     function checkForNewState(gameState) {
         var playerAtFirst, playerAtSecond, playerAtThird;
 
-        if (gameState.board.indexOf(0) === -1) {
+        if (isDraw(gameState.board)) {
             gameState.isDraw = true;
             return gameState;
         } else {
