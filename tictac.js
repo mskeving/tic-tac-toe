@@ -75,7 +75,7 @@
                     newState = getNewState(player, state, i);
                     score = calcScore(player, newState);
 
-                    if (bestScore == undefined || isNewScoreBestScore(score, best_score, player)) {
+                    if (bestScore == undefined || isNewScoreBestScore(score, bestScore, player)) {
                         bestScore = score;
                         bestMove = i;
                     }
@@ -89,9 +89,9 @@
         }
 
         function getNewState(player, state, move) {
-            var state_copy = state.slice();
-            state_copy[move] = player;
-            return state_copy;
+            var stateCopy = state.slice();
+            stateCopy[move] = player;
+            return stateCopy;
         }
 
         function calcScore(player, state) {
@@ -104,20 +104,20 @@
             } else if (isDraw(state)) {
                 return 0;
             } else {
-                return calcMove(next_player(player), state).score;
+                return calcMove(nextPlayer(player), state).score;
             }
         }
 
-        function next_player(player) {
+        function nextPlayer(player) {
             if (player == COMPUTER) {
                 return HUMAN;
             }
             return COMPUTER;
         }
 
-        function isNewScoreBestScore(score, bestScore_so_far, player) {
-            return ((player == COMPUTER && score > bestScore_so_far) ||
-                (player == HUMAN && score < bestScore_so_far));
+        function isNewScoreBestScore(score, bestScoreSoFar, player) {
+            return ((player == COMPUTER && score > bestScoreSoFar) ||
+                (player == HUMAN && score < bestScoreSoFar));
         }
     }
 
